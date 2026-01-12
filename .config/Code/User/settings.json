@@ -1,0 +1,84 @@
+{
+  "locale": "ru",
+  // === АВТОМАТИЧЕСКИЕ СОГЛАСИЯ (без запросов) ===
+  "security.workspace.trust.enabled": false,
+  "security.workspace.trust.untrustedFiles": "open",
+  "security.workspace.trust.startupPrompt": "never",
+  "security.workspace.trust.banner": "never",
+  "security.workspace.trust.emptyWindow": true,
+  // === ФАЙЛЫ: автосохранение и права ===
+  "files.autoSave": "afterDelay",
+  "files.autoSaveDelay": 1000,
+  "files.saveConflictResolution": "overwriteFileOnDisk",
+  "files.enableTrash": false,
+  "files.confirmDelete": false,
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  // === GIT: без подтверждений ===
+  "git.confirmSync": false,
+  "git.confirmForcePush": false,
+  "git.confirmNoVerifyCommit": false,
+  "git.allowForcePush": true,
+  "git.allowNoVerifyCommit": true,
+  "git.autofetch": true,
+  "git.enableSmartCommit": true,
+  "git.postCommitCommand": "sync",
+  "git.suggestSmartCommit": false,
+  "git.openRepositoryInParentFolders": "always",
+  // === EXPLORER: без подтверждений ===
+  "explorer.confirmDelete": false,
+  "explorer.confirmDragAndDrop": false,
+  "explorer.confirmPasteNative": false,
+  "explorer.autoReveal": true,
+  // === EDITOR: полные права ===
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "editor.acceptSuggestionOnEnter": "on",
+  "editor.suggestSelection": "first",
+  "editor.quickSuggestions": {
+    "other": true,
+    "comments": true,
+    "strings": true
+  },
+  // === TERMINAL: без ограничений ===
+  "terminal.integrated.confirmOnExit": "never",
+  "terminal.integrated.confirmOnKill": "never",
+  "terminal.integrated.enablePersistentSessions": true,
+  "terminal.integrated.allowChords": false,
+  // === DEBUG: автозапуск ===
+  "debug.confirmOnExit": "never",
+  "debug.internalConsoleOptions": "neverOpen",
+  "debug.openDebug": "neverOpen",
+  "debug.showBreakpointsInOverviewRuler": true,
+  // === EXTENSIONS: автоустановка ===
+  "extensions.autoUpdate": true,
+  "extensions.autoCheckUpdates": true,
+  "extensions.ignoreRecommendations": false,
+  "extensions.confirmSync": false,
+  // === TELEMETRY: отключить ===
+  "telemetry.telemetryLevel": "off",
+  // === UPDATES: автоматически ===
+  "update.mode": "default",
+  "update.showReleaseNotes": false,
+  // === SEARCH: без ограничений ===
+  "search.followSymlinks": true,
+  "search.useIgnoreFiles": false,
+  "search.exclude": {},
+  // === WINDOW: без подтверждений ===
+  "window.confirmBeforeClose": "never",
+  "window.confirmSaveUntitledWorkspace": false,
+  "window.restoreWindows": "all",
+  // === COPILOT: полные права ===
+  "github.copilot.enable": {
+    "*": true
+  },
+  "github.copilot.editor.enableAutoCompletions": true,
+  "chat.editing.confirmEditRequestRemoval": false,
+  "chat.editing.confirmEditRequestRetry": false,
+  // === WORKBENCH ===
+  "workbench.startupEditor": "none",
+  "workbench.tips.enabled": false,
+  "workbench.editor.enablePreview": false,
+  "workbench.editor.closeOnFileDelete": true,
+  "github.copilot.nextEditSuggestions.enabled": true
+}

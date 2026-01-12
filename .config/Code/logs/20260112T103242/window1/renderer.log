@@ -1,0 +1,31 @@
+2026-01-12 10:32:45.671 [info] Started local extension host with pid 518483.
+2026-01-12 10:32:47.938 [info] MCP Registry configured: https://api.mcp.github.com
+2026-01-12 10:32:48.253 [info] Settings Sync: Account status changed from uninitialized to unavailable
+2026-01-12 10:32:49.326 [info] [perf] Render performance baseline is 36ms
+2026-01-12 10:32:49.349 [error] [Extension Host] (node:518483) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `exe --trace-deprecation ...` to show where the warning was created)
+2026-01-12 10:32:49.350 [error] [Extension Host] (node:518483) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+2026-01-12 10:32:55.092 [error] chatParticipant must be declared in package.json: claude-code
+2026-01-12 10:32:55.356 [error] CodeExpectedError: No default agent registered
+    at Zdt.activateDefaultAgent (vscode-file://vscode-app/usr/share/code/resources/app/out/vs/workbench/workbench.desktop.main.js:2204:16762)
+2026-01-12 10:32:55.357 [warning] [LM] No provider registered for vendor azure
+2026-01-12 10:32:55.357 [warning] [LM] No provider registered for vendor anthropic
+2026-01-12 10:32:55.357 [warning] [LM] No provider registered for vendor xai
+2026-01-12 10:32:55.358 [warning] [LM] No provider registered for vendor ollama
+2026-01-12 10:32:55.358 [warning] [LM] No provider registered for vendor openai
+2026-01-12 10:32:55.358 [warning] [LM] No provider registered for vendor gemini
+2026-01-12 10:32:55.359 [warning] [LM] No provider registered for vendor groq
+2026-01-12 10:32:55.359 [warning] [LM] No provider registered for vendor openrouter
+2026-01-12 10:32:55.359 [warning] [LM] No provider registered for vendor customoai
+2026-01-12 10:32:56.135 [error] An unknown error occurred. Please consult the log for more details.
+2026-01-12 10:35:01.500 [error] command 'github.copilot.signIn' not found: Error: command 'github.copilot.signIn' not found
+    at lZe.n (vscode-file://vscode-app/usr/share/code/resources/app/out/vs/workbench/workbench.desktop.main.js:1348:3890)
+    at lZe.executeCommand (vscode-file://vscode-app/usr/share/code/resources/app/out/vs/workbench/workbench.desktop.main.js:1348:3822)
+2026-01-12 10:35:01.831 [error] An unknown error occurred. Please consult the log for more details.
+2026-01-12 10:35:36.021 [error] [Extension Host] Failed to fetch remote embeddings cache from https://embeddings.vscode-cdn.net/text-3-small/v1.108/tools/latest.txt
+2026-01-12 10:35:36.022 [error] [Extension Host] Response status: 404, status text: 
+2026-01-12 10:35:36.230 [error] [Extension Host] Failed to fetch remote embeddings cache from https://embeddings.vscode-cdn.net/text-3-small/v1.108/tools/core.json
+2026-01-12 10:35:36.231 [error] [Extension Host] Response status: 404, status text: 
+2026-01-12 10:38:19.264 [error] An unknown error occurred. Please consult the log for more details.
+2026-01-12 10:40:36.523 [error] An unknown error occurred. Please consult the log for more details.
+2026-01-12 10:40:52.009 [error] An unknown error occurred. Please consult the log for more details.

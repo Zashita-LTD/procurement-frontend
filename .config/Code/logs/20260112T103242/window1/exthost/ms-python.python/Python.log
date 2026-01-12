@@ -1,0 +1,26 @@
+2026-01-12 10:35:34.364 [info] Telemetry level is off
+2026-01-12 10:35:34.365 [info] Experiments are disabled, only manually opted experiments are active.
+2026-01-12 10:35:34.418 [info] Starting Environment refresh
+2026-01-12 10:35:34.418 [info] Searching for interpreters in posix paths locator
+2026-01-12 10:35:34.428 [info] Searching for pyenv environments
+2026-01-12 10:35:34.428 [info] Searching for conda environments
+2026-01-12 10:35:34.429 [info] Searching for global virtual environments
+2026-01-12 10:35:34.429 [info] Searching for custom virtual environments
+2026-01-12 10:35:34.432 [info] pyenv is not installed
+2026-01-12 10:35:34.432 [info] Finished searching for pyenv environments: 13 milliseconds
+2026-01-12 10:35:34.433 [info] Finished searching for custom virtual envs: 12 milliseconds
+2026-01-12 10:35:34.446 [info] > conda info --json
+2026-01-12 10:35:34.454 [info] Finished searching for global virtual envs: 34 milliseconds
+2026-01-12 10:35:34.478 [info] Found: /bin/python3 --> /bin/python3.13
+2026-01-12 10:35:34.478 [info] Found: /bin/python3.13 --> /bin/python3.13
+2026-01-12 10:35:34.600 [info] Found: /usr/bin/python3 --> /usr/bin/python3.13
+2026-01-12 10:35:34.600 [info] Found: /usr/bin/python3.13 --> /usr/bin/python3.13
+2026-01-12 10:35:34.654 [info] Finished searching for interpreters in posix paths locator: 225 milliseconds
+2026-01-12 10:35:34.654 [info] > /bin/python3 -I ~/.vscode/extensions/ms-python.python-2026.0.0-linux-x64/python_files/get_output_via_markers.py ~/.vscode/extensions/ms-python.python-2026.0.0-linux-x64/python_files/interpreterInfo.py
+2026-01-12 10:35:34.675 [info] > /usr/bin/python3 -I ~/.vscode/extensions/ms-python.python-2026.0.0-linux-x64/python_files/get_output_via_markers.py ~/.vscode/extensions/ms-python.python-2026.0.0-linux-x64/python_files/interpreterInfo.py
+2026-01-12 10:35:34.675 [info] Environments refresh paths discovered (event): 258 milliseconds
+2026-01-12 10:35:34.675 [info] Environments refresh paths discovered: 259 milliseconds
+2026-01-12 10:35:34.731 [info] Environments refresh finished (event): 315 milliseconds
+2026-01-12 10:35:34.744 [info] Environment refresh took 326 milliseconds
+2026-01-12 10:35:34.969 [info] Python interpreter path: /bin/python3
+2026-01-12 10:35:37.875 [info] Starting Pylance language server.

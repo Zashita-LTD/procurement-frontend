@@ -1,0 +1,18 @@
+[
+    { "key": "ctrl+s", "command": "workbench.action.files.save" },
+    { "key": "ctrl+z", "command": "undo" },
+    { "key": "ctrl+y", "command": "redo" },
+    { "key": "ctrl+c", "command": "editor.action.clipboardCopyAction" },
+    { "key": "ctrl+x", "command": "editor.action.clipboardCutAction" },
+    { "key": "ctrl+v", "command": "editor.action.clipboardPasteAction" },
+    { "key": "ctrl+a", "command": "editor.action.selectAll" },
+    { "key": "ctrl+f", "command": "actions.find" },
+    { "key": "ctrl+h", "command": "editor.action.startFindReplaceAction" },
+    { "key": "ctrl+p", "command": "workbench.action.quickOpen" },
+    { "key": "ctrl+shift+p", "command": "workbench.action.showCommands" },
+    { "key": "ctrl+w", "command": "workbench.action.closeActiveEditor" },
+    { "key": "ctrl+/", "command": "editor.action.commentLine" },
+    { "key": "ctrl+i", "command": "github.copilot.chat.startInlineChat" },
+    { "key": "f2", "command": "editor.action.rename" },
+    { "key": "f12", "command": "editor.action.revealDefinition" }
+]

@@ -1,0 +1,4 @@
+2026-01-12 10:35:35.404 [info] Client: Pylance client (2025.10.4) started with python extension (2026.0.0)
+2026-01-12 10:35:36.379 [info] (523518): Server root directory: file:///home/procurement-frontend/.vscode/extensions/ms-python.vscode-pylance-2025.10.4/dist
+2026-01-12 10:35:36.380 [info] (523518): Pylance language server 2025.10.4 (pyright version 1.1.407, commit 906e40aa) starting
+2026-01-12 10:35:37.978 [info] (523518): Starting Mcp server id:4298 ...
