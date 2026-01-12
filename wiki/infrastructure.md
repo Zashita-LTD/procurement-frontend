@@ -100,3 +100,7 @@ sudo certbot --nginx -d 97v.ru -d www.97v.ru
 - ✅ Установлен и настроен BIND9 DNS сервер
 - ✅ Создано firewall правило `allow-dns-default`
 - ✅ Настроена зона 97v.ru со всеми записями
+- ✅ Перенесён procurement-brain (AI парсер документов)
+- ✅ Перенесён Product_Service (сервис товаров)
+- ✅ Создано firewall правило `allow-dns-default`
+- ✅ Настроена зона 97v.ru со всеми записями

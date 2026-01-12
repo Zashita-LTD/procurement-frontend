@@ -47,12 +47,12 @@ server {
     server_name 97v.ru www.97v.ru;
     root /var/www/97v.ru;
     index index.html;
-    
+
     # SPA routing
     location / {
         try_files $uri $uri/ /index.html;
     }
-    
+
     # Кэширование статики
     location /assets/ {
         expires 1y;

@@ -5,8 +5,8 @@
 ## Разделы
 
 - [🏗️ Инфраструктура](infrastructure.md) - серверы, DNS, развёртывание
+- [� Backend Services](backend-services.md) - procurement-brain, Product_Service
 - [🚀 Deployment](deployment.md) - процесс деплоя
-- [🔧 Конфигурация](configuration.md) - настройки проекта
 
 ---
 
