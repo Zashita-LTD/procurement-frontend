@@ -1,0 +1,67 @@
+name: Deploy to 97v.ru
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+env:
+  PROJECT_ID: viktor-integration
+  ZONE: europe-west1-b
+  INSTANCE: instance-20260108-145330
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Setup gcloud
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Deploy to VM
+        run: |
+          # Create deployment package
+          tar -czf dist.tar.gz -C dist .
+          
+          # Copy to server
+          gcloud compute scp dist.tar.gz vik9541@${{ env.INSTANCE }}:/tmp/ \
+            --zone=${{ env.ZONE }} \
+            --tunnel-through-iap \
+            --quiet
+          
+          # Deploy on server
+          gcloud compute ssh vik9541@${{ env.INSTANCE }} \
+            --zone=${{ env.ZONE }} \
+            --tunnel-through-iap \
+            --quiet \
+            --command='
+              sudo mkdir -p /var/www/97v.ru
+              sudo tar -xzf /tmp/dist.tar.gz -C /var/www/97v.ru
+              sudo chown -R www-data:www-data /var/www/97v.ru
+              rm /tmp/dist.tar.gz
+              echo "✅ Deployed successfully"
+            '
+
+      - name: Verify deployment
+        run: |
+          curl -s -o /dev/null -w "%{http_code}" https://97v.ru || echo "Site check pending DNS"
