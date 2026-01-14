@@ -3,7 +3,6 @@ import { cn } from '@/lib/utils'
 import { 
   LayoutDashboard, 
   FolderOpen, 
-  Upload, 
   Settings, 
   LogOut,
   Package

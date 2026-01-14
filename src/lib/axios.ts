@@ -3,15 +3,18 @@ import axios from 'axios'
 // Флаг для использования моков (для разработки без бэкенда)
 export const USE_MOCKS = import.meta.env.VITE_USE_MOCKS === 'true'
 
+const PRODUCT_API_BASE_URL = import.meta.env.VITE_PRODUCT_API_BASE_URL || '/api/products'
+const BRAIN_API_BASE_URL = import.meta.env.VITE_BRAIN_API_BASE_URL || '/api/brain'
+
 export const productApi = axios.create({
-  baseURL: '/api/products',
+  baseURL: PRODUCT_API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },
 })
 
 export const brainApi = axios.create({
-  baseURL: '/api/brain',
+  baseURL: BRAIN_API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import { useParams, useNavigate } from 'react-router-dom'
 import {
     ArrowLeft, Star, ShoppingCart, Heart, Share2, Download,
@@ -13,7 +14,10 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { formatPrice } from '@/lib/utils'
-import { mockProducts } from '@/mocks/data'
+import { productApi } from '@/lib/axios'
+import { mapDetailToProduct } from '@/lib/productMapper'
+import type { Product } from '@/types'
+import type { ApiProductDetail } from '@/types/api/product'
 import { AIEnrichment, AIEnrichmentFlow } from '@/components/AIEnrichment'
 
 // Типы для отзывов
@@ -124,6 +128,11 @@ const mockQuestions: Question[] = [
     },
 ]
 
+async function fetchProductDetail(id: string): Promise<Product> {
+    const { data } = await productApi.get<ApiProductDetail>(`/${id}`)
+    return mapDetailToProduct(data)
+}
+
 export function ProductDetailPage() {
     const { id } = useParams<{ id: string }>()
     const navigate = useNavigate()
@@ -137,16 +146,56 @@ export function ProductDetailPage() {
         storage: false,
     })
 
-    const product = mockProducts.find(p => p.id === id)
+    const {
+        data: product,
+        isLoading,
+        isError,
+    } = useQuery<Product>({
+        queryKey: ['product-detail', id],
+        queryFn: () => fetchProductDetail(id as string),
+        enabled: Boolean(id),
+    })
 
-    if (!product) {
+    if (!id) {
         return (
             <div className="flex flex-col h-full">
                 <Header title="Товар не найден" />
                 <div className="flex-1 flex items-center justify-center">
                     <div className="text-center">
                         <Package className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-                        <p className="text-gray-500 mb-4">Товар не найден</p>
+                        <p className="text-gray-500 mb-4">Запрос без идентификатора товара</p>
+                        <Button onClick={() => navigate('/catalog')}>
+                            <ArrowLeft className="h-4 w-4 mr-2" />
+                            Вернуться в каталог
+                        </Button>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
+    if (isLoading) {
+        return (
+            <div className="flex flex-col h-full">
+                <Header title="Загрузка товара" />
+                <div className="flex-1 flex items-center justify-center">
+                    <div className="flex flex-col items-center gap-4 text-gray-500">
+                        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600" />
+                        <p>Загружаем карточку...</p>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
+    if (isError || !product) {
+        return (
+            <div className="flex flex-col h-full">
+                <Header title="Товар не найден" />
+                <div className="flex-1 flex items-center justify-center">
+                    <div className="text-center">
+                        <Package className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+                        <p className="text-gray-500 mb-4">Товар не найден или больше не доступен</p>
                         <Button onClick={() => navigate('/catalog')}>
                             <ArrowLeft className="h-4 w-4 mr-2" />
                             Вернуться в каталог

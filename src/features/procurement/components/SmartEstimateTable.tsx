@@ -9,7 +9,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
-import { cn, formatPrice, getMatchStatusColor, getMatchStatusLabel } from '@/lib/utils'
+import { cn, formatPrice, getMatchStatusColor } from '@/lib/utils'
 import type { EstimateItem, Product } from '@/types'
 import { ProductDetailsDialog } from './ProductDetailsDialog'
 import { ManualSearchDialog } from './ManualSearchDialog'

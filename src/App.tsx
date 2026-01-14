@@ -111,7 +111,7 @@ function App() {
             </Routes>
 
             {/* Модалка с горячими клавишами */}
-            {showHotkeysHelp && <HotkeysHelp onClose={() => setShowHotkeysHelp(false)} />}
+            {showHotkeysHelp && <HotkeysHelp isOpen={showHotkeysHelp} onClose={() => setShowHotkeysHelp(false)} />}
         </>
     )
 }

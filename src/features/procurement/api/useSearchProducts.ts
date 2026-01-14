@@ -1,7 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
-import { productApi, USE_MOCKS } from '@/lib/axios'
-import { mockHandlers } from '@/mocks'
+import { productApi } from '@/lib/axios'
+import { mapListItemToProduct } from '@/lib/productMapper'
 import type { Product } from '@/types'
+import type { ApiPaginatedResponse, ApiProductListItem } from '@/types/api/product'
 
 interface SearchParams {
   query: string
@@ -9,50 +10,19 @@ interface SearchParams {
   limit?: number
 }
 
-interface SemanticSearchResponse {
-  items: Array<{
-    id: string
-    sku: string
-    name: string
-    description: string
-    price: number
-    currency: string
-    image_url?: string
-    category: string
-    supplier: string
-    stock: number
-    score?: number
-  }>
-  total: number
-}
-
 async function searchProducts(params: SearchParams): Promise<Product[]> {
-  if (USE_MOCKS) {
-    return mockHandlers.searchProducts(params.query)
+  const payload = {
+    query: params.query,
+    page: 1,
+    per_page: params.limit || 10,
   }
 
-  // Используем semantic-search эндпоинт для умного поиска
-  const response = await productApi.get<SemanticSearchResponse>('/semantic-search', {
-    params: {
-      q: params.query,
-      limit: params.limit || 10,
-      category: params.category,
-    },
-  })
+  const response = await productApi.post<ApiPaginatedResponse<ApiProductListItem>>(
+    '/search/semantic',
+    payload,
+  )
 
-  // Преобразуем ответ бэкенда в формат Product
-  return response.data.items.map((item) => ({
-    id: item.id,
-    sku: item.sku,
-    name: item.name,
-    description: item.description,
-    price: item.price,
-    currency: item.currency || 'RUB',
-    imageUrl: item.image_url,
-    category: item.category,
-    supplier: item.supplier,
-    stock: item.stock,
-  }))
+  return response.data.data.map(mapListItemToProduct)
 }
 
 export function useSearchProducts(params: SearchParams) {

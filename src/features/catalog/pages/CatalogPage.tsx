@@ -6,9 +6,10 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent } from '@/components/ui/card'
 import { ProductCard } from '@/components/ProductCard'
-import { productApi, USE_MOCKS } from '@/lib/axios'
-import { mockHandlers } from '@/mocks'
+import { productApi } from '@/lib/axios'
+import { mapListItemToProduct } from '@/lib/productMapper'
 import type { Product } from '@/types'
+import type { ApiPaginatedResponse, ApiProductListItem } from '@/types/api/product'
 
 interface CatalogResponse {
     products: Product[]
@@ -17,87 +18,43 @@ interface CatalogResponse {
     pageSize: number
 }
 
-interface BackendProductsResponse {
-    items: Array<{
-        id: string
-        sku: string
-        name: string
-        description: string
-        price: number
-        currency: string
-        image_url?: string
-        category: string
-        supplier: string
-        stock: number
-    }>
-    total: number
-    page: number
-    page_size: number
-}
-
 async function fetchCatalog(params: {
     search?: string
     category?: string
     page?: number
 }): Promise<CatalogResponse> {
-    if (USE_MOCKS) {
-        return mockHandlers.getCatalog(params)
-    }
+    const perPage = 20
 
-    // Если есть поисковый запрос — используем semantic-search
     if (params.search && params.search.length >= 2) {
-        const response = await productApi.get<BackendProductsResponse>('/semantic-search', {
-            params: {
-                q: params.search,
-                limit: 20,
-                category: params.category,
+        const { data } = await productApi.post<ApiPaginatedResponse<ApiProductListItem>>(
+            '/search/semantic',
+            {
+                query: params.search,
+                page: params.page || 1,
+                per_page: perPage,
             },
-        })
+        )
 
         return {
-            products: response.data.items.map((item) => ({
-                id: item.id,
-                sku: item.sku,
-                name: item.name,
-                description: item.description,
-                price: item.price,
-                currency: item.currency || 'RUB',
-                imageUrl: item.image_url,
-                category: item.category,
-                supplier: item.supplier,
-                stock: item.stock,
-            })),
-            total: response.data.total,
-            page: params.page || 1,
-            pageSize: 20,
+            products: data.data.map(mapListItemToProduct),
+            total: data.pagination.total_items,
+            page: data.pagination.page,
+            pageSize: data.pagination.per_page,
         }
     }
 
-    // Иначе — получаем весь каталог
-    const response = await productApi.get<BackendProductsResponse>('/', {
+    const { data } = await productApi.get<ApiPaginatedResponse<ApiProductListItem>>('/', {
         params: {
             page: params.page || 1,
-            page_size: 20,
-            category: params.category,
+            per_page: perPage,
         },
     })
 
     return {
-        products: response.data.items.map((item) => ({
-            id: item.id,
-            sku: item.sku,
-            name: item.name,
-            description: item.description,
-            price: item.price,
-            currency: item.currency || 'RUB',
-            imageUrl: item.image_url,
-            category: item.category,
-            supplier: item.supplier,
-            stock: item.stock,
-        })),
-        total: response.data.total,
-        page: response.data.page,
-        pageSize: response.data.page_size,
+        products: data.data.map(mapListItemToProduct),
+        total: data.pagination.total_items,
+        page: data.pagination.page,
+        pageSize: data.pagination.per_page,
     }
 }
 
