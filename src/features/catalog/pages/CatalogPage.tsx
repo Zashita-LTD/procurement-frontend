@@ -27,7 +27,7 @@ async function fetchCatalog(params: {
 
     if (params.search && params.search.length >= 2) {
         const { data } = await productApi.post<ApiPaginatedResponse<ApiProductListItem>>(
-            '/products/search/semantic',
+            '/products/products/search/semantic',
             {
                 query: params.search,
                 page: params.page || 1,
@@ -49,6 +49,9 @@ async function fetchCatalog(params: {
             per_page: perPage,
         },
     })
+
+    console.log('API Response:', data)
+    console.log('Products count:', data.data?.length)
 
     return {
         products: data.data.map(mapListItemToProduct),

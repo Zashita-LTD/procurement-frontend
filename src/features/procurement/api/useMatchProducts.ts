@@ -17,7 +17,7 @@ async function matchSingleItem(originalText: string): Promise<{
   matchScore: number
 }> {
   try {
-    const response = await productApi.post<ApiPaginatedResponse<ApiProductListItem>>('/products/search/semantic', {
+    const response = await productApi.post<ApiPaginatedResponse<ApiProductListItem>>('/products/products/search/semantic', {
       query: originalText,
       page: 1,
       per_page: 5,
