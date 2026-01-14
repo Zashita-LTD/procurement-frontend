@@ -5,12 +5,14 @@ import {
   FolderOpen, 
   Settings, 
   LogOut,
-  Package
+  Package,
+  Camera
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 const navigation = [
   { name: 'Дашборд', href: '/', icon: LayoutDashboard },
+  { name: 'Заказ по фото', href: '/snap-order', icon: Camera, highlight: true },
   { name: 'Проекты', href: '/projects', icon: FolderOpen },
   { name: 'Каталог', href: '/catalog', icon: Package },
   { name: 'Настройки', href: '/settings', icon: Settings },
@@ -35,7 +37,8 @@ export function Sidebar() {
       {/* Navigation */}
       <nav className="flex-1 space-y-1 px-3 py-4">
         {navigation.map((item) => {
-          const isActive = location.pathname === item. href
+          const isActive = location.pathname === item.href
+          const isHighlight = 'highlight' in item && item.highlight
           return (
             <Link
               key={item.name}
@@ -44,11 +47,18 @@ export function Sidebar() {
                 'flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors',
                 isActive
                   ? 'bg-slate-800 text-white'
-                  : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+                  : isHighlight
+                    ? 'text-green-400 hover:bg-green-900/30 hover:text-green-300'
+                    : 'text-slate-300 hover:bg-slate-800 hover:text-white'
               )}
             >
-              <item.icon className="mr-3 h-5 w-5" />
+              <item.icon className={cn("mr-3 h-5 w-5", isHighlight && !isActive && "text-green-400")} />
               {item.name}
+              {isHighlight && (
+                <span className="ml-auto text-xs bg-green-500 text-white px-1.5 py-0.5 rounded">
+                  NEW
+                </span>
+              )}
             </Link>
           )
         })}

@@ -27,7 +27,7 @@ async function fetchCatalog(params: {
 
     if (params.search && params.search.length >= 2) {
         const { data } = await productApi.post<ApiPaginatedResponse<ApiProductListItem>>(
-            '/products/products/search/semantic',
+            '/products/search/semantic',
             {
                 query: params.search,
                 page: params.page || 1,
@@ -43,7 +43,7 @@ async function fetchCatalog(params: {
         }
     }
 
-    const { data } = await productApi.get<ApiPaginatedResponse<ApiProductListItem>>('/products/products', {
+    const { data } = await productApi.get<ApiPaginatedResponse<ApiProductListItem>>('/products', {
         params: {
             page: params.page || 1,
             per_page: perPage,
@@ -76,7 +76,7 @@ export function CatalogPage() {
     const [page, setPage] = useState(1)
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
 
-    const { data, isLoading } = useQuery({
+    const { data, isLoading, error } = useQuery({
         queryKey: ['catalog', searchQuery, selectedCategory, page],
         queryFn: () =>
             fetchCatalog({
@@ -85,6 +85,8 @@ export function CatalogPage() {
                 page,
             }),
     })
+    
+    console.log('useQuery result - data:', data, 'isLoading:', isLoading, 'error:', error)
 
     return (
         <div className="flex flex-col h-full">

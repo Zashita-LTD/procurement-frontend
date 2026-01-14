@@ -4,6 +4,7 @@ import { MainLayout } from '@/components/layout/MainLayout'
 import { DashboardPage } from '@/features/dashboard/pages/DashboardPage'
 import { ProjectsPage } from '@/features/projects/pages/ProjectsPage'
 import { ProjectDetailsPage } from '@/features/procurement/pages/ProjectDetailsPage'
+import { SnapOrderPage } from '@/features/procurement/pages/SnapOrderPage'
 import { CatalogPage } from '@/features/catalog/pages/CatalogPage'
 import { ProductDetailPage } from '@/features/catalog/pages/ProductDetailPage'
 import { SettingsPage } from '@/features/settings/pages/SettingsPage'
@@ -101,6 +102,7 @@ function App() {
                     <Route index element={<DashboardPage />} />
                     <Route path="projects" element={<ProjectsPage />} />
                     <Route path="projects/:projectId" element={<ProjectDetailsPage />} />
+                    <Route path="snap-order" element={<SnapOrderPage />} />
                     <Route path="catalog" element={<CatalogPage />} />
                     <Route path="catalog/:id" element={<ProductDetailPage />} />
                     <Route path="settings" element={<SettingsPage />} />
