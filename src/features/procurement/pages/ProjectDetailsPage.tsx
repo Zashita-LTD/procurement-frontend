@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { RefreshCw, FileText, Download } from 'lucide-react'
+import { RefreshCw, FileText, Download, BarChart3, List } from 'lucide-react'
 import { Header } from '@/components/layout/Header'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { UploadZone } from '../components/UploadZone'
 import { SmartEstimateTable } from '../components/SmartEstimateTable'
+import { ConstructionSchedule } from '@/components/schedule'
 import { useEstimateItems } from '../api/useEstimateItems'
 import { useMatchProducts } from '../api/useMatchProducts'
 import type { Product } from '@/types'
@@ -13,6 +15,7 @@ import type { Product } from '@/types'
 export function ProjectDetailsPage() {
   const { projectId } = useParams<{ projectId: string }>()
   const [showUpload, setShowUpload] = useState(false)
+  const [activeTab, setActiveTab] = useState('materials')
   
   const { data: items, isLoading, refetch } = useEstimateItems(projectId!)
   const matchMutation = useMatchProducts()
@@ -33,6 +36,13 @@ export function ProjectDetailsPage() {
     review: items.filter(i => i.matchScore >= 0.5 && i.matchScore < 0.8).length,
     manual: items.filter(i => i.matchScore < 0.5).length,
   } : null
+
+  // Prepare items for schedule
+  const scheduleItems = items?.map(item => ({
+    name: item.name || item.originalName,
+    quantity: item.quantity || 1,
+    unit: item.unit || 'шт',
+  })) || []
 
   return (
     <div className="flex flex-col h-full">
@@ -126,28 +136,68 @@ export function ProjectDetailsPage() {
           </Card>
         )}
 
-        {/* Table */}
-        {isLoading ? (
-          <div className="flex items-center justify-center h-64">
-            <RefreshCw className="h-8 w-8 animate-spin text-gray-400" />
-          </div>
-        ) : items && items.length > 0 ? (
-          <SmartEstimateTable items={items} onItemUpdate={handleItemUpdate} />
-        ) : (
-          <Card>
-            <CardContent className="flex flex-col items-center justify-center h-64">
-              <FileText className="h-12 w-12 text-gray-300 mb-4" />
-              <p className="text-gray-500">Нет загруженных документов</p>
-              <Button
-                variant="link"
-                onClick={() => setShowUpload(true)}
-                className="mt-2"
-              >
-                Загрузить первый документ
-              </Button>
-            </CardContent>
-          </Card>
-        )}
+        {/* Tabs: Materials / Schedule */}
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid w-full grid-cols-2 max-w-md">
+            <TabsTrigger value="materials" className="flex items-center gap-2">
+              <List className="h-4 w-4" />
+              Материалы
+            </TabsTrigger>
+            <TabsTrigger value="schedule" className="flex items-center gap-2">
+              <BarChart3 className="h-4 w-4" />
+              График строительства
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="materials" className="mt-4">
+            {/* Table */}
+            {isLoading ? (
+              <div className="flex items-center justify-center h-64">
+                <RefreshCw className="h-8 w-8 animate-spin text-gray-400" />
+              </div>
+            ) : items && items.length > 0 ? (
+              <SmartEstimateTable items={items} onItemUpdate={handleItemUpdate} />
+            ) : (
+              <Card>
+                <CardContent className="flex flex-col items-center justify-center h-64">
+                  <FileText className="h-12 w-12 text-gray-300 mb-4" />
+                  <p className="text-gray-500">Нет загруженных документов</p>
+                  <Button
+                    variant="link"
+                    onClick={() => setShowUpload(true)}
+                    className="mt-2"
+                  >
+                    Загрузить первый документ
+                  </Button>
+                </CardContent>
+              </Card>
+            )}
+          </TabsContent>
+
+          <TabsContent value="schedule" className="mt-4">
+            {scheduleItems.length > 0 ? (
+              <ConstructionSchedule
+                projectId={projectId}
+                projectName={`Проект ${projectId}`}
+                items={scheduleItems}
+              />
+            ) : (
+              <Card>
+                <CardContent className="flex flex-col items-center justify-center h-64">
+                  <BarChart3 className="h-12 w-12 text-gray-300 mb-4" />
+                  <p className="text-gray-500">Загрузите документы для создания графика</p>
+                  <Button
+                    variant="link"
+                    onClick={() => setShowUpload(true)}
+                    className="mt-2"
+                  >
+                    Загрузить документ
+                  </Button>
+                </CardContent>
+              </Card>
+            )}
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   )
