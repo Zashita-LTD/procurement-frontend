@@ -1,0 +1,20 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: .
+      args:
+        VITE_USE_MOCKS: "false"
+        VITE_PRODUCT_API_BASE_URL: "/api/products"
+        VITE_BRAIN_API_BASE_URL: "/api/brain"
+    container_name: procurement-frontend
+    ports:
+      - "3000:80"
+    restart: unless-stopped
+    networks:
+      - procurement-net
+
+networks:
+  procurement-net:
+    external: true
