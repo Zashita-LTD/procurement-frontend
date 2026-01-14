@@ -50,9 +50,6 @@ async function fetchCatalog(params: {
         },
     })
 
-    console.log('API Response:', data)
-    console.log('Products count:', data.data?.length)
-
     return {
         products: data.data.map(mapListItemToProduct),
         total: data.pagination.total_items,
@@ -76,7 +73,7 @@ export function CatalogPage() {
     const [page, setPage] = useState(1)
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
 
-    const { data, isLoading, error } = useQuery({
+    const { data, isLoading } = useQuery({
         queryKey: ['catalog', searchQuery, selectedCategory, page],
         queryFn: () =>
             fetchCatalog({
@@ -85,8 +82,6 @@ export function CatalogPage() {
                 page,
             }),
     })
-    
-    console.log('useQuery result - data:', data, 'isLoading:', isLoading, 'error:', error)
 
     return (
         <div className="flex flex-col h-full">

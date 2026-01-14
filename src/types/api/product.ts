@@ -48,6 +48,7 @@ export interface ApiProductListItem {
   sku?: string | null
   category: ApiCategoryShort
   price?: ApiPriceDTO | null
+  image_url?: string | null
   source_name?: string | null
   enrichment_status: string
   quality_score?: number | null
