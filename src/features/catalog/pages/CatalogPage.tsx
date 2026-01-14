@@ -27,7 +27,7 @@ async function fetchCatalog(params: {
 
     if (params.search && params.search.length >= 2) {
         const { data } = await productApi.post<ApiPaginatedResponse<ApiProductListItem>>(
-            '/search/semantic',
+            '/products/search/semantic',
             {
                 query: params.search,
                 page: params.page || 1,
@@ -43,7 +43,7 @@ async function fetchCatalog(params: {
         }
     }
 
-    const { data } = await productApi.get<ApiPaginatedResponse<ApiProductListItem>>('/', {
+    const { data } = await productApi.get<ApiPaginatedResponse<ApiProductListItem>>('/products/products', {
         params: {
             page: params.page || 1,
             per_page: perPage,

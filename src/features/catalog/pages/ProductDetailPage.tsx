@@ -129,7 +129,8 @@ const mockQuestions: Question[] = [
 ]
 
 async function fetchProductDetail(id: string): Promise<Product> {
-    const { data } = await productApi.get<ApiProductDetail>(`/${id}`)
+    // Используем /products/{uuid} для получения полной информации о продукте
+    const { data } = await productApi.get<ApiProductDetail>(`/products/${id}`)
     return mapDetailToProduct(data)
 }
 

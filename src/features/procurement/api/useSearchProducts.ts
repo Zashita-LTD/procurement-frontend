@@ -18,7 +18,7 @@ async function searchProducts(params: SearchParams): Promise<Product[]> {
   }
 
   const response = await productApi.post<ApiPaginatedResponse<ApiProductListItem>>(
-    '/search/semantic',
+    '/products/search/semantic',
     payload,
   )
 

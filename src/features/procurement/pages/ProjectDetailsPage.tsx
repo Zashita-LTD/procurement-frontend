@@ -39,7 +39,7 @@ export function ProjectDetailsPage() {
 
   // Prepare items for schedule
   const scheduleItems = items?.map(item => ({
-    name: item.name || item.originalName,
+    name: item.originalText,
     quantity: item.quantity || 1,
     unit: item.unit || 'шт',
   })) || []
@@ -177,7 +177,6 @@ export function ProjectDetailsPage() {
           <TabsContent value="schedule" className="mt-4">
             {scheduleItems.length > 0 ? (
               <ConstructionSchedule
-                projectId={projectId}
                 projectName={`Проект ${projectId}`}
                 items={scheduleItems}
               />

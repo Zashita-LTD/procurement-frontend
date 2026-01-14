@@ -2,7 +2,7 @@
  * Schedule API service
  * API клиент для работы с планированием строительства
  */
-import axios from '@/lib/axios';
+import { brainApi } from '@/lib/axios';
 import type {
   ScheduleResponse,
   StageInfo,
@@ -13,13 +13,14 @@ import type {
   AddDependencyRequest,
 } from '@/types/schedule';
 
-const BASE_URL = '/api/v1/schedule';
+// Schedule endpoints через Brain API
+const SCHEDULE_PATH = '/api/v1/schedule';
 
 /**
  * Получить список доступных этапов строительства
  */
 export async function getAvailableStages(): Promise<StageInfo[]> {
-  const response = await axios.get<StageInfo[]>(`${BASE_URL}/stages`);
+  const response = await brainApi.get<StageInfo[]>(`${SCHEDULE_PATH}/stages`);
   return response.data;
 }
 
@@ -27,7 +28,7 @@ export async function getAvailableStages(): Promise<StageInfo[]> {
  * Получить план строительства для загруженного документа
  */
 export async function getScheduleFromDocument(documentId: string): Promise<ScheduleResponse> {
-  const response = await axios.get<ScheduleResponse>(`${BASE_URL}/document/${documentId}`);
+  const response = await brainApi.get<ScheduleResponse>(`${SCHEDULE_PATH}/document/${documentId}`);
   return response.data;
 }
 
@@ -35,7 +36,7 @@ export async function getScheduleFromDocument(documentId: string): Promise<Sched
  * Создать план строительства из списка материалов
  */
 export async function createScheduleFromItems(request: ScheduleFromItemsRequest): Promise<ScheduleResponse> {
-  const response = await axios.post<ScheduleResponse>(`${BASE_URL}/from-items`, request);
+  const response = await brainApi.post<ScheduleResponse>(`${SCHEDULE_PATH}/from-items`, request);
   return response.data;
 }
 
@@ -43,7 +44,7 @@ export async function createScheduleFromItems(request: ScheduleFromItemsRequest)
  * Быстрое создание плана из названий материалов
  */
 export async function createScheduleFromNames(request: ScheduleFromNamesRequest): Promise<ScheduleResponse> {
-  const response = await axios.post<ScheduleResponse>(`${BASE_URL}/from-names`, request);
+  const response = await brainApi.post<ScheduleResponse>(`${SCHEDULE_PATH}/from-names`, request);
   return response.data;
 }
 
@@ -51,7 +52,7 @@ export async function createScheduleFromNames(request: ScheduleFromNamesRequest)
  * Создать план с кастомными этапами
  */
 export async function createCustomSchedule(request: CustomScheduleRequest): Promise<ScheduleResponse> {
-  const response = await axios.post<ScheduleResponse>(`${BASE_URL}/custom`, request);
+  const response = await brainApi.post<ScheduleResponse>(`${SCHEDULE_PATH}/custom`, request);
   return response.data;
 }
 
@@ -59,7 +60,7 @@ export async function createCustomSchedule(request: CustomScheduleRequest): Prom
  * Обновить прогресс этапа
  */
 export async function updateStageProgress(request: UpdateProgressRequest): Promise<{ message: string }> {
-  const response = await axios.post<{ message: string }>(`${BASE_URL}/progress`, request);
+  const response = await brainApi.post<{ message: string }>(`${SCHEDULE_PATH}/progress`, request);
   return response.data;
 }
 
@@ -67,7 +68,7 @@ export async function updateStageProgress(request: UpdateProgressRequest): Promi
  * Добавить зависимость между этапами
  */
 export async function addStageDependency(request: AddDependencyRequest): Promise<{ message: string }> {
-  const response = await axios.post<{ message: string }>(`${BASE_URL}/dependencies`, request);
+  const response = await brainApi.post<{ message: string }>(`${SCHEDULE_PATH}/dependencies`, request);
   return response.data;
 }
 
@@ -79,10 +80,10 @@ export async function exportToExcel(
   startDate?: string
 ): Promise<Blob> {
   const url = startDate
-    ? `${BASE_URL}/export/excel?start_date=${startDate}`
-    : `${BASE_URL}/export/excel`;
+    ? `${SCHEDULE_PATH}/export/excel?start_date=${startDate}`
+    : `${SCHEDULE_PATH}/export/excel`;
   
-  const response = await axios.post(url, request, {
+  const response = await brainApi.post(url, request, {
     responseType: 'blob',
   });
   return response.data;
@@ -92,7 +93,7 @@ export async function exportToExcel(
  * Экспорт в CSV
  */
 export async function exportToCsv(request: ScheduleFromItemsRequest): Promise<Blob> {
-  const response = await axios.post(`${BASE_URL}/export/csv`, request, {
+  const response = await brainApi.post(`${SCHEDULE_PATH}/export/csv`, request, {
     responseType: 'blob',
   });
   return response.data;

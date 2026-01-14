@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Calendar, List, BarChart3 } from 'lucide-react';
+import { List, BarChart3 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { GanttView } from './GanttView';
 import { StageListView } from './StageListView';

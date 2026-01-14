@@ -2,27 +2,12 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { brainApi, productApi, USE_MOCKS } from '@/lib/axios'
 import { mockHandlers } from '@/mocks'
 import type { MatchResponse, EstimateItem, Product } from '@/types'
+import type { ApiPaginatedResponse, ApiProductListItem } from '@/types/api/product'
+import { mapListItemToProduct } from '@/lib/productMapper'
 
 interface MatchProductsParams {
   projectId: string
   itemIds?: string[]
-}
-
-interface SemanticSearchResponse {
-  items: Array<{
-    id: string
-    sku: string
-    name: string
-    description: string
-    price: number
-    currency: string
-    image_url?: string
-    category: string
-    supplier: string
-    stock: number
-    score: number
-  }>
-  total: number
 }
 
 // Функция для подбора товара по тексту через semantic-search
@@ -32,22 +17,13 @@ async function matchSingleItem(originalText: string): Promise<{
   matchScore: number
 }> {
   try {
-    const response = await productApi.get<SemanticSearchResponse>('/semantic-search', {
-      params: { q: originalText, limit: 5 },
+    const response = await productApi.post<ApiPaginatedResponse<ApiProductListItem>>('/products/search/semantic', {
+      query: originalText,
+      page: 1,
+      per_page: 5,
     })
 
-    const items = response.data.items.map((item) => ({
-      id: item.id,
-      sku: item.sku,
-      name: item.name,
-      description: item.description,
-      price: item.price,
-      currency: item.currency || 'RUB',
-      imageUrl: item.image_url,
-      category: item.category,
-      supplier: item.supplier,
-      stock: item.stock,
-    }))
+    const items = response.data.data.map(mapListItemToProduct)
 
     if (items.length === 0) {
       return { alternatives: [], matchScore: 0 }
@@ -55,7 +31,8 @@ async function matchSingleItem(originalText: string): Promise<{
 
     // Первый результат — лучшее совпадение
     const bestMatch = items[0]
-    const score = response.data.items[0]?.score || 0.5
+    // Используем quality_score как proxy для match score
+    const score = response.data.data[0]?.quality_score || 0.5
 
     return {
       matchedProduct: bestMatch,

@@ -3,7 +3,7 @@
  * Объединяет GanttView и StageListView с переключением и экспортом
  */
 import { useState, useEffect } from 'react';
-import { LayoutList, BarChart3, Download, FileSpreadsheet, FileText, RefreshCw } from 'lucide-react';
+import { LayoutList, BarChart3, FileSpreadsheet, FileText, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { GanttView } from './GanttView';
@@ -21,7 +21,6 @@ import type { ScheduleResponse, ConstructionStage, StageStatus } from '@/types/s
 type ViewMode = 'list' | 'gantt';
 
 interface ConstructionScheduleProps {
-  projectId?: string;
   projectName?: string;
   documentId?: string;
   items?: Array<{ name: string; quantity: number; unit: string }>;
@@ -29,7 +28,6 @@ interface ConstructionScheduleProps {
 }
 
 export function ConstructionSchedule({
-  projectId,
   projectName,
   documentId,
   items,
