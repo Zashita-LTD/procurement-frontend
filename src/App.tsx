@@ -5,9 +5,12 @@ import { DashboardPage } from '@/features/dashboard/pages/DashboardPage'
 import { ProjectsPage } from '@/features/projects/pages/ProjectsPage'
 import { ProjectDetailsPage } from '@/features/procurement/pages/ProjectDetailsPage'
 import { SnapOrderPage } from '@/features/procurement/pages/SnapOrderPage'
+import { OrderHistoryPage } from '@/features/procurement/pages/OrderHistoryPage'
+import { ExpensesDashboardPage } from '@/features/analytics/pages/ExpensesDashboardPage'
 import { CatalogPage } from '@/features/catalog/pages/CatalogPage'
 import { ProductDetailPage } from '@/features/catalog/pages/ProductDetailPage'
 import { SettingsPage } from '@/features/settings/pages/SettingsPage'
+import { NotificationSettingsPage } from '@/features/settings/pages/NotificationSettingsPage'
 import { LoginPage } from '@/features/auth/pages/LoginPage'
 import { HotkeysHelp } from '@/hooks/useHotkeys'
 
@@ -103,9 +106,12 @@ function App() {
                     <Route path="projects" element={<ProjectsPage />} />
                     <Route path="projects/:projectId" element={<ProjectDetailsPage />} />
                     <Route path="snap-order" element={<SnapOrderPage />} />
+                    <Route path="orders" element={<OrderHistoryPage />} />
+                    <Route path="analytics" element={<ExpensesDashboardPage />} />
                     <Route path="catalog" element={<CatalogPage />} />
                     <Route path="catalog/:id" element={<ProductDetailPage />} />
                     <Route path="settings" element={<SettingsPage />} />
+                    <Route path="settings/notifications" element={<NotificationSettingsPage />} />
                 </Route>
 
                 {/* 404 */}

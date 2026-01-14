@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
-import { Plus, FolderOpen, Clock, CheckCircle, AlertTriangle, TrendingUp } from 'lucide-react'
+import { Plus, FolderOpen, Clock, CheckCircle, AlertTriangle, TrendingUp, Camera, History, BarChart3 } from 'lucide-react'
 import { Header } from '@/components/layout/Header'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -169,6 +169,24 @@ export function DashboardPage() {
                             <CardTitle>Быстрые действия</CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-3">
+                            <Link to="/snap-order" className="block">
+                                <Button className="w-full justify-start bg-green-500 hover:bg-green-600 text-white">
+                                    <Camera className="h-4 w-4 mr-2" />
+                                    Заказ по фото
+                                </Button>
+                            </Link>
+                            <Link to="/orders" className="block">
+                                <Button className="w-full justify-start" variant="outline">
+                                    <History className="h-4 w-4 mr-2" />
+                                    История заказов
+                                </Button>
+                            </Link>
+                            <Link to="/analytics" className="block">
+                                <Button className="w-full justify-start" variant="outline">
+                                    <BarChart3 className="h-4 w-4 mr-2" />
+                                    Аналитика расходов
+                                </Button>
+                            </Link>
                             <Link to="/projects" className="block">
                                 <Button className="w-full justify-start" variant="outline">
                                     <Plus className="h-4 w-4 mr-2" />
