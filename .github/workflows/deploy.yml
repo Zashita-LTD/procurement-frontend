@@ -7,7 +7,7 @@ on:
 
 env:
   PROJECT_ID: viktor-integration
-  ZONE: europe-west1-b
+  ZONE: us-central1-b
   INSTANCE: instance-20260114-035054
 
 jobs:
