@@ -8,7 +8,7 @@ on:
 env:
   PROJECT_ID: viktor-integration
   ZONE: europe-west1-b
-  INSTANCE: instance-20260108-145330
+  INSTANCE: instance-20260114-035054
 
 jobs:
   build-and-deploy:
@@ -43,14 +43,14 @@ jobs:
           # Create deployment package
           tar -czf dist.tar.gz -C dist .
           
-          # Copy to server
-          gcloud compute scp dist.tar.gz vik9541@${{ env.INSTANCE }}:/tmp/ \
+          # Copy to server using OS Login (service account)
+          gcloud compute scp dist.tar.gz ${{ env.INSTANCE }}:/tmp/ \
             --zone=${{ env.ZONE }} \
             --tunnel-through-iap \
             --quiet
           
           # Deploy on server
-          gcloud compute ssh vik9541@${{ env.INSTANCE }} \
+          gcloud compute ssh ${{ env.INSTANCE }} \
             --zone=${{ env.ZONE }} \
             --tunnel-through-iap \
             --quiet \
