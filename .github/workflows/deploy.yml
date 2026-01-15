@@ -44,7 +44,7 @@ jobs:
           tar -czf dist.tar.gz -C dist .
           
           # Copy to server using OS Login (service account)
-          gcloud compute scp dist.tar.gz ${{ env.INSTANCE }}:/tmp/ \
+          gcloud compute scp dist.tar.gz ${{ env.INSTANCE }}:~ \
             --zone=${{ env.ZONE }} \
             --tunnel-through-iap \
             --quiet
@@ -56,9 +56,9 @@ jobs:
             --quiet \
             --command='
               sudo mkdir -p /var/www/97v.ru
-              sudo tar -xzf /tmp/dist.tar.gz -C /var/www/97v.ru
+              sudo tar -xzf ~/dist.tar.gz -C /var/www/97v.ru
               sudo chown -R www-data:www-data /var/www/97v.ru
-              rm /tmp/dist.tar.gz
+              rm ~/dist.tar.gz
               echo "✅ Deployed successfully"
             '
 
