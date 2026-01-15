@@ -31,7 +31,15 @@ import { PrivateDashboard, WizardPage, AuditPage, InspirationPage } from '@/feat
 import { ProProjectsPage, BillsPage, LoyaltyPage } from '@/features/pro'
 
 // Company Pages (B2B)
-import { ForemanFeedPage, BuyerOrdersPage, ExecutiveAnalyticsPage } from '@/features/company'
+import { 
+  ForemanFeedPage, 
+  BuyerOrdersPage, 
+  BuyerRequestsPage, 
+  BuyerAnalyticsPage, 
+  BuyerSuppliersPage, 
+  BuyerCatalogPage,
+  ExecutiveAnalyticsPage 
+} from '@/features/company'
 
 // Legacy Pages (old procurement system)
 import { DashboardPage } from '@/features/dashboard/pages/DashboardPage'
@@ -48,6 +56,7 @@ import { NotificationSettingsPage } from '@/features/settings/pages/Notification
 import { ProfilePage } from '@/features/auth/pages/ProfilePage'
 
 import { HotkeysHelp } from '@/hooks/useHotkeys'
+import { AgentFAB } from '@/features/agent'
 
 // Компонент для редиректа на правильный дашборд по роли
 function RoleBasedRedirect() {
@@ -218,10 +227,10 @@ function AppRoutes() {
         >
           <Route index element={<Navigate to="orders" replace />} />
           <Route path="orders" element={<BuyerOrdersPage />} />
-          <Route path="requests" element={<div className="p-4">Заявки (в разработке)</div>} />
-          <Route path="analytics" element={<div className="p-4">Аналитика (в разработке)</div>} />
-          <Route path="suppliers" element={<div className="p-4">Поставщики (в разработке)</div>} />
-          <Route path="catalog" element={<div className="p-4">Каталог (в разработке)</div>} />
+          <Route path="requests" element={<BuyerRequestsPage />} />
+          <Route path="analytics" element={<BuyerAnalyticsPage />} />
+          <Route path="suppliers" element={<BuyerSuppliersPage />} />
+          <Route path="catalog" element={<BuyerCatalogPage />} />
           <Route path="settings" element={<div className="p-4">Настройки (в разработке)</div>} />
         </Route>
 
@@ -285,6 +294,18 @@ function App() {
   return (
     <AuthProvider>
       <AppRoutes />
+      {/* AI Agent FAB - доступен на всех страницах */}
+      <AgentFAB 
+        position="bottom-right"
+        onBuyProduct={(product) => {
+          console.log('Buy product:', product)
+          // TODO: Add to cart
+        }}
+        onPayInvoice={(invoiceId) => {
+          console.log('Pay invoice:', invoiceId)
+          // TODO: Navigate to payment
+        }}
+      />
     </AuthProvider>
   )
 }
