@@ -424,7 +424,7 @@ function ChatSupplierCard({
 // Price Comparison Widget
 function ChatPriceComparison({ product, offers }: PriceComparisonWidget) {
   const sortedOffers = [...offers].sort((a, b) => a.price - b.price)
-  const lowestPrice = sortedOffers[0]?.price || 0
+  // lowest price used in UI as sortedOffers[0].price
 
   return (
     <Card className="w-full max-w-md bg-white shadow-md">

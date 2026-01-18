@@ -3,14 +3,10 @@
  */
 import { useState, useEffect } from 'react';
 import { 
-  TrendingUp, 
-  TrendingDown, 
   DollarSign, 
   Package, 
   Users,
-  BarChart3,
-  ShoppingCart,
-  Calendar
+  ShoppingCart
 } from 'lucide-react';
 
 interface DashboardStats {
@@ -64,17 +60,6 @@ interface DashboardData {
 }
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://34.46.91.149:8000';
-
-const statusLabels: Record<string, string> = {
-  pending: 'Ожидает',
-  approved: 'Одобрен',
-  in_progress: 'В работе',
-  shipped: 'Отправлен',
-  delivered: 'Доставлен',
-  completed: 'Завершён',
-  cancelled: 'Отменён',
-  draft: 'Черновик',
-};
 
 export function BuyerAnalyticsPage() {
   const [data, setData] = useState<DashboardData | null>(null);

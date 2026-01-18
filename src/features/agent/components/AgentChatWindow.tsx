@@ -13,7 +13,6 @@ import {
   RefreshCw,
   StopCircle,
   Sparkles,
-  Volume2,
   VolumeX,
   Loader2
 } from 'lucide-react'

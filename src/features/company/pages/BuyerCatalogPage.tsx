@@ -5,7 +5,6 @@ import { useState, useEffect } from 'react';
 import { 
   Package, 
   Search, 
-  Filter, 
   Grid, 
   List,
   ShoppingCart,

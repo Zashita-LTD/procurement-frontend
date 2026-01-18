@@ -3,6 +3,19 @@ import { User, UserRole, roleThemeConfig, roleHomePages } from '@/types/roles';
 
 // Тестовые пользователи для демо-режима
 export const testUsers: Record<string, User> = {
+  // === СУПЕР-АДМИНИСТРАТОР - Первый житель цифрового города ===
+  'info@97v.ru': {
+    id: '100',
+    email: 'info@97v.ru',
+    full_name: 'Лаврентьев Виктор Петрович',
+    role: 'executive', // Максимальная роль в системе
+    phone: '+7 999 123-45-67',
+    company: {
+      id: 'c97v',
+      name: '97v.ru - Главный администратор системы',
+      inn: '7725123456',
+    },
+  },
   'private@test.com': {
     id: '1',
     email: 'private@test.com',

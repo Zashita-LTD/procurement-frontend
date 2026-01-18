@@ -4,9 +4,9 @@
  */
 
 import { memo, useMemo } from 'react'
-import { User, Bot, RefreshCw } from 'lucide-react'
+import { User, Bot } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import type { ChatMessage, MessageContent } from '../types'
+import type { ChatMessage } from '../types'
 import { WidgetRenderer, type WidgetRendererProps } from './ChatWidgets'
 
 // Simple Markdown renderer (можно заменить на react-markdown)
@@ -73,7 +73,6 @@ export const MessageBubble = memo(function MessageBubble({
   onViewCatalog,
 }: MessageBubbleProps) {
   const isUser = message.role === 'user'
-  const isAgent = message.role === 'agent'
   const isEmpty = message.content.length === 0
 
   return (

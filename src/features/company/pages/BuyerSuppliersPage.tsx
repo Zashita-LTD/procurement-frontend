@@ -9,7 +9,6 @@ import {
   Mail, 
   MapPin,
   Search,
-  Filter,
   ChevronRight,
   Building2,
   ShoppingCart
