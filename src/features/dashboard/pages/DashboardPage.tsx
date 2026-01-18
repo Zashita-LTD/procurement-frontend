@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { 
     Plus, FolderOpen, Clock, CheckCircle, AlertTriangle, TrendingUp, 
     Camera, History, BarChart3, Users, Building2, Package, ShoppingCart,
-    ArrowUpRight, Activity
+    ArrowUpRight, Activity, Shield, Eye, Lock
 } from 'lucide-react'
 import { Header } from '@/components/layout/Header'
 import { Button } from '@/components/ui/button'
@@ -48,6 +48,17 @@ interface TopPerformer {
     secondary_value?: string
 }
 
+// Информация о тенанте (кто смотрит данные)
+interface TenantInfo {
+    user: string
+    role: string
+    company?: string
+    company_id?: string
+    access_level: string
+    is_super_admin: boolean
+    note: string
+}
+
 interface DashboardData {
     summary: DashboardSummary
     kpi: DashboardKPI
@@ -57,6 +68,7 @@ interface DashboardData {
     top_buyers: TopPerformer[]
     top_companies: TopPerformer[]
     popular_products: TopPerformer[]
+    tenant_info?: TenantInfo
 }
 
 // Legacy типы для совместимости
@@ -304,45 +316,88 @@ function StatusBadge({ status }: { status: Project['status'] }) {
 // === НОВЫЙ ДАШБОРД ЦИФРОВОГО ГОРОДА ===
 
 function DigitalCityDashboard({ data }: { data: DashboardData }) {
-    const { summary, kpi, recent_activity, orders_by_status, top_buyers, top_companies, popular_products } = data
+    const { summary, kpi, recent_activity, orders_by_status, top_buyers, top_companies, popular_products, tenant_info } = data
+    
+    const isSuperAdmin = tenant_info?.is_super_admin || false
+    const accessLevel = tenant_info?.access_level || 'unknown'
 
     return (
         <div className="flex flex-col h-full">
             <Header title="🏙️ Цифровой Город Закупок" />
 
             <div className="flex-1 p-6 space-y-6 overflow-auto">
-                {/* Главные метрики */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <MetricCard
-                        title="Пользователей"
-                        value={summary.total_users}
-                        subtitle={`${kpi.active_users} активных`}
-                        icon={<Users className="h-4 w-4 text-blue-500" />}
-                        color="blue"
-                    />
-                    <MetricCard
-                        title="Компаний"
-                        value={summary.total_companies}
-                        subtitle={`${kpi.verified_companies} верифицированных`}
-                        icon={<Building2 className="h-4 w-4 text-purple-500" />}
-                        color="purple"
-                    />
-                    <MetricCard
-                        title="Заказов"
-                        value={summary.total_orders}
-                        subtitle={`${kpi.orders_today} сегодня`}
-                        icon={<ShoppingCart className="h-4 w-4 text-green-500" />}
-                        color="green"
-                    />
-                    <MetricCard
-                        title="Выручка"
-                        value={formatPrice(summary.total_revenue)}
-                        subtitle={`Средний чек: ${formatPrice(kpi.avg_order_value)}`}
-                        icon={<TrendingUp className="h-4 w-4 text-emerald-500" />}
-                        color="emerald"
-                        isPrice
-                    />
-                </div>
+                {/* Баннер для супер-админа */}
+                {isSuperAdmin && (
+                    <div className="bg-gradient-to-r from-red-600 to-red-700 rounded-lg p-4 text-white shadow-lg border-2 border-red-400">
+                        <div className="flex items-center gap-3">
+                            <Shield className="h-8 w-8" />
+                            <div>
+                                <h3 className="font-bold text-lg flex items-center gap-2">
+                                    🔴 РЕЖИМ СУПЕР-АДМИНИСТРАТОРА
+                                    <span className="px-2 py-0.5 bg-white/20 rounded text-xs">GLOBAL ACCESS</span>
+                                </h3>
+                                <p className="text-red-100 text-sm">
+                                    Вы видите ВСЕ данные системы, включая seed-данные "оболочки". 
+                                    Обычные пользователи видят только свои данные.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* Информация о доступе для не-админов */}
+                {!isSuperAdmin && tenant_info && (
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                        <div className="flex items-center gap-3">
+                            <Eye className="h-6 w-6 text-blue-500" />
+                            <div>
+                                <h3 className="font-medium text-blue-900">
+                                    Уровень доступа: {accessLevel === 'company' ? 'Компания' : 'Личные данные'}
+                                </h3>
+                                <p className="text-sm text-blue-700">{tenant_info.note}</p>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* Главные метрики - с пометкой для супер-админа */}
+                <AdminOnlyWrapper isAdmin={isSuperAdmin} label="Полная статистика системы">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <MetricCard
+                            title="Пользователей"
+                            value={summary.total_users}
+                            subtitle={`${kpi.active_users} активных`}
+                            icon={<Users className="h-4 w-4 text-blue-500" />}
+                            color="blue"
+                            isAdminOnly={isSuperAdmin}
+                        />
+                        <MetricCard
+                            title="Компаний"
+                            value={summary.total_companies}
+                            subtitle={`${kpi.verified_companies} верифицированных`}
+                            icon={<Building2 className="h-4 w-4 text-purple-500" />}
+                            color="purple"
+                            isAdminOnly={isSuperAdmin}
+                        />
+                        <MetricCard
+                            title="Заказов"
+                            value={summary.total_orders}
+                            subtitle={`${kpi.orders_today} сегодня`}
+                            icon={<ShoppingCart className="h-4 w-4 text-green-500" />}
+                            color="green"
+                            isAdminOnly={isSuperAdmin}
+                        />
+                        <MetricCard
+                            title="Выручка"
+                            value={formatPrice(summary.total_revenue)}
+                            subtitle={`Средний чек: ${formatPrice(kpi.avg_order_value)}`}
+                            icon={<TrendingUp className="h-4 w-4 text-emerald-500" />}
+                            color="emerald"
+                            isPrice
+                            isAdminOnly={isSuperAdmin}
+                        />
+                    </div>
+                </AdminOnlyWrapper>
 
                 {/* KPI карточки */}
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -448,98 +503,119 @@ function DigitalCityDashboard({ data }: { data: DashboardData }) {
                     </Card>
                 </div>
 
-                {/* Топ-листы */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    {/* Топ покупатели */}
-                    <Card>
-                        <CardHeader>
-                            <CardTitle className="flex items-center gap-2">
-                                <Users className="h-5 w-5 text-blue-500" />
-                                Топ покупатели
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="space-y-3">
-                                {top_buyers.slice(0, 5).map((buyer, idx) => (
-                                    <div key={buyer.id} className="flex items-center justify-between">
-                                        <div className="flex items-center gap-2">
-                                            <span className="w-6 h-6 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-xs font-bold">
-                                                {idx + 1}
-                                            </span>
-                                            <span className="text-sm font-medium truncate max-w-[140px]">{buyer.name}</span>
-                                        </div>
-                                        <div className="text-right">
-                                            <p className="text-sm font-bold text-green-600">{formatPrice(buyer.value)}</p>
-                                            {buyer.secondary_value && (
-                                                <p className="text-xs text-gray-500">{buyer.secondary_value}</p>
-                                            )}
-                                        </div>
+                {/* Топ-листы - только для супер-админа */}
+                {isSuperAdmin && (
+                    <AdminOnlyWrapper isAdmin={isSuperAdmin} label="Топ-листы всей системы">
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                            {/* Топ покупатели */}
+                            <Card className="border-2 border-red-300 bg-red-50/30">
+                                <CardHeader>
+                                    <CardTitle className="flex items-center gap-2">
+                                        <Users className="h-5 w-5 text-blue-500" />
+                                        Топ покупатели
+                                        <AdminBadge />
+                                    </CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                    <div className="space-y-3">
+                                        {top_buyers.slice(0, 5).map((buyer, idx) => (
+                                            <div key={buyer.id} className="flex items-center justify-between">
+                                                <div className="flex items-center gap-2">
+                                                    <span className="w-6 h-6 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-xs font-bold">
+                                                        {idx + 1}
+                                                    </span>
+                                                    <span className="text-sm font-medium truncate max-w-[140px]">{buyer.name}</span>
+                                                </div>
+                                                <div className="text-right">
+                                                    <p className="text-sm font-bold text-green-600">{formatPrice(buyer.value)}</p>
+                                                    {buyer.secondary_value && (
+                                                        <p className="text-xs text-gray-500">{buyer.secondary_value}</p>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        ))}
                                     </div>
-                                ))}
-                            </div>
-                        </CardContent>
-                    </Card>
+                                </CardContent>
+                            </Card>
 
-                    {/* Топ компании */}
-                    <Card>
-                        <CardHeader>
-                            <CardTitle className="flex items-center gap-2">
-                                <Building2 className="h-5 w-5 text-purple-500" />
-                                Топ компании
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="space-y-3">
-                                {top_companies.slice(0, 5).map((company, idx) => (
-                                    <div key={company.id} className="flex items-center justify-between">
-                                        <div className="flex items-center gap-2">
-                                            <span className="w-6 h-6 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center text-xs font-bold">
-                                                {idx + 1}
-                                            </span>
-                                            <span className="text-sm font-medium truncate max-w-[140px]">{company.name}</span>
-                                        </div>
-                                        <div className="text-right">
-                                            <p className="text-sm font-bold text-amber-600">⭐ {company.value}</p>
-                                            {company.secondary_value && (
-                                                <p className="text-xs text-gray-500">{company.secondary_value}</p>
-                                            )}
-                                        </div>
+                            {/* Топ компании */}
+                            <Card className="border-2 border-red-300 bg-red-50/30">
+                                <CardHeader>
+                                    <CardTitle className="flex items-center gap-2">
+                                        <Building2 className="h-5 w-5 text-purple-500" />
+                                        Топ компании
+                                        <AdminBadge />
+                                    </CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                    <div className="space-y-3">
+                                        {top_companies.slice(0, 5).map((company, idx) => (
+                                            <div key={company.id} className="flex items-center justify-between">
+                                                <div className="flex items-center gap-2">
+                                                    <span className="w-6 h-6 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center text-xs font-bold">
+                                                        {idx + 1}
+                                                    </span>
+                                                    <span className="text-sm font-medium truncate max-w-[140px]">{company.name}</span>
+                                                </div>
+                                                <div className="text-right">
+                                                    <p className="text-sm font-bold text-amber-600">⭐ {company.value}</p>
+                                                    {company.secondary_value && (
+                                                        <p className="text-xs text-gray-500">{company.secondary_value}</p>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        ))}
                                     </div>
-                                ))}
-                            </div>
-                        </CardContent>
-                    </Card>
+                                </CardContent>
+                            </Card>
 
-                    {/* Популярные товары */}
-                    <Card>
-                        <CardHeader>
-                            <CardTitle className="flex items-center gap-2">
-                                <Package className="h-5 w-5 text-green-500" />
-                                Популярные товары
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="space-y-3">
-                                {popular_products.slice(0, 5).map((product, idx) => (
-                                    <div key={product.id} className="flex items-center justify-between">
-                                        <div className="flex items-center gap-2">
-                                            <span className="w-6 h-6 rounded-full bg-green-100 text-green-700 flex items-center justify-center text-xs font-bold">
-                                                {idx + 1}
-                                            </span>
-                                            <span className="text-sm font-medium truncate max-w-[140px]">{product.name}</span>
-                                        </div>
-                                        <div className="text-right">
-                                            <p className="text-sm font-bold">{product.value.toLocaleString()}</p>
-                                            {product.secondary_value && (
-                                                <p className="text-xs text-gray-500">{product.secondary_value}</p>
-                                            )}
-                                        </div>
+                            {/* Популярные товары */}
+                            <Card className="border-2 border-red-300 bg-red-50/30">
+                                <CardHeader>
+                                    <CardTitle className="flex items-center gap-2">
+                                        <Package className="h-5 w-5 text-green-500" />
+                                        Популярные товары
+                                        <AdminBadge />
+                                    </CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                    <div className="space-y-3">
+                                        {popular_products.slice(0, 5).map((product, idx) => (
+                                            <div key={product.id} className="flex items-center justify-between">
+                                                <div className="flex items-center gap-2">
+                                                    <span className="w-6 h-6 rounded-full bg-green-100 text-green-700 flex items-center justify-center text-xs font-bold">
+                                                        {idx + 1}
+                                                    </span>
+                                                    <span className="text-sm font-medium truncate max-w-[140px]">{product.name}</span>
+                                                </div>
+                                                <div className="text-right">
+                                                    <p className="text-sm font-bold">{product.value.toLocaleString()}</p>
+                                                    {product.secondary_value && (
+                                                        <p className="text-xs text-gray-500">{product.secondary_value}</p>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        ))}
                                     </div>
-                                ))}
+                                </CardContent>
+                            </Card>
+                        </div>
+                    </AdminOnlyWrapper>
+                )}
+
+                {/* Сообщение для не-админов о скрытых данных */}
+                {!isSuperAdmin && (
+                    <Card className="border border-gray-200 bg-gray-50">
+                        <CardContent className="pt-6">
+                            <div className="flex items-center gap-3 text-gray-500">
+                                <Lock className="h-5 w-5" />
+                                <p className="text-sm">
+                                    Топ-листы покупателей, компаний и товаров доступны только администраторам системы.
+                                </p>
                             </div>
                         </CardContent>
                     </Card>
-                </div>
+                )}
 
                 {/* Быстрые действия */}
                 <Card>
@@ -588,13 +664,55 @@ function DigitalCityDashboard({ data }: { data: DashboardData }) {
 
 // === ВСПОМОГАТЕЛЬНЫЕ КОМПОНЕНТЫ ===
 
+// Обёртка для admin-only контента с красной рамкой
+function AdminOnlyWrapper({ 
+    isAdmin, 
+    label, 
+    children 
+}: { 
+    isAdmin: boolean
+    label: string
+    children: React.ReactNode 
+}) {
+    if (!isAdmin) {
+        return <>{children}</>
+    }
+    
+    return (
+        <div className="relative">
+            {/* Красная метка сверху */}
+            <div className="absolute -top-3 left-4 z-10">
+                <span className="px-3 py-1 bg-red-600 text-white text-xs font-bold rounded-full flex items-center gap-1 shadow-lg">
+                    <Shield className="h-3 w-3" />
+                    {label}
+                </span>
+            </div>
+            {/* Контент с красной рамкой */}
+            <div className="border-2 border-red-400 rounded-lg p-4 pt-5 bg-red-50/20">
+                {children}
+            </div>
+        </div>
+    )
+}
+
+// Бейдж "Только для админа"
+function AdminBadge() {
+    return (
+        <span className="ml-auto px-2 py-0.5 bg-red-100 text-red-700 text-[10px] font-bold rounded flex items-center gap-1">
+            <Lock className="h-2.5 w-2.5" />
+            ADMIN
+        </span>
+    )
+}
+
 function MetricCard({ 
     title, 
     value, 
     subtitle, 
     icon, 
     color,
-    isPrice 
+    isPrice,
+    isAdminOnly = false
 }: { 
     title: string
     value: string | number
@@ -602,11 +720,19 @@ function MetricCard({
     icon: React.ReactNode
     color: string
     isPrice?: boolean
+    isAdminOnly?: boolean
 }) {
     return (
-        <Card>
+        <Card className={isAdminOnly ? 'border-2 border-red-300 bg-red-50/30' : ''}>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium text-gray-500">{title}</CardTitle>
+                <CardTitle className="text-sm font-medium text-gray-500 flex items-center gap-2">
+                    {title}
+                    {isAdminOnly && (
+                        <span className="px-1.5 py-0.5 bg-red-100 text-red-600 text-[9px] font-bold rounded">
+                            🔴
+                        </span>
+                    )}
+                </CardTitle>
                 {icon}
             </CardHeader>
             <CardContent>
